@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Waqqas Jabbar",
+      "authorEmail": "waqqas.jabbar@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}
