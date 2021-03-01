@@ -33,5 +33,6 @@ module.exports = class extends Generator {
 
   writing() {
     this.spawnCommand('django-admin', ['startproject', this.options.projectName]);
+    this.config.set('projectName', this.options.projectName);
   }
 };
