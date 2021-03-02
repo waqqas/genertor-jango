@@ -16,6 +16,27 @@ module.exports = class extends Generator {
         }
     }
 
+    prompting() {
+        const prompts = [
+            {
+                type: 'input',
+                name: 'apiUrlPath',
+                message: 'Enter url path for API?',
+                default: 'api',
+            },
+        ];
+
+        return this.prompt(prompts).then(props => {
+            this.currentConfig.apiUrlPath = props.apiUrlPath;
+        });
+
+    }
+
+    writing() {
+        this._add_in_installed_apps('rest_framework');
+        this._add_in_url_patterns(`path('${this.currentConfig.apiUrlPath}/', include('rest_framework.urls', namespace='rest_framework'))`);
+    }
+
     _add_in_installed_apps(appName) {
         const settingsFilePath = this.destinationPath(path.join(this.currentConfig.projectName, 'settings.py'));
         if (!this.fs.exists(settingsFilePath)) {
@@ -38,11 +59,5 @@ module.exports = class extends Generator {
         const content = this.fs.read(urlsFilePath);
         const updated = content.replace(/urlpatterns = \[/, `urlpatterns = [\n    ${pattern},`);
         this.fs.write(urlsFilePath, updated);
-    }
-
-
-    writing() {
-        this._add_in_installed_apps('rest_framework');
-        this._add_in_url_patterns(`path('api-auth/', include('rest_framework.urls'))`);
     }
 };
