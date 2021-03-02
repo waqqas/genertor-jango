@@ -3,7 +3,6 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
 
-
 module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
@@ -12,7 +11,6 @@ module.exports = class extends Generator {
 
   }
   writing() {
-    const projectName = this.config.get('projectName')
-    this.spawnCommand('python', ['manage.py', ...this.options.manage], { cwd: this.destinationPath(projectName) });
+    this.spawnCommand('python', ['manage.py', ...this.options.manage], { cwd: this.destinationPath('') });
   }
 };

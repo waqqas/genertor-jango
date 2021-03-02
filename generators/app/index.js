@@ -2,6 +2,7 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
+const path = require('path');
 
 module.exports = class extends Generator {
   constructor(args, opts) {
@@ -32,7 +33,12 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    this.spawnCommand('django-admin', ['startproject', this.options.projectName]);
+    this.spawnCommandSync('django-admin', ['startproject', this.options.projectName]);
     this.config.set('projectName', this.options.projectName);
+  }
+
+  install() {
+    // moving .yo-rc.json in the project
+    this.fs.move(this.destinationPath('.yo-rc.json'), this.destinationPath(path.join(this.options.projectName, '.yo-rc.json')));
   }
 };

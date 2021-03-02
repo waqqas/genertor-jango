@@ -20,6 +20,8 @@ Then generate your new project:
 
 ```bash
 yo jango <project-name>
+cd <project-name>
+yo jango:manage startapp api
 ```
 
 ## Getting To Know Yeoman
