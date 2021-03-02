@@ -16,20 +16,6 @@ module.exports = class extends Generator {
     this.log(
       yosay(`Welcome to the rad ${chalk.red('generator-jango')} generator!`)
     );
-
-    // const prompts = [
-    //   {
-    //     type: 'input',
-    //     name: 'projectName',
-    //     message: 'Enter name of the project?',
-    //     store: true
-    //   }
-    // ];
-
-    // return this.prompt(prompts).then(props => {
-    //   // To access props later use this.props.someAnswer;
-    //   this.props = props;
-    // });
   }
 
   writing() {
