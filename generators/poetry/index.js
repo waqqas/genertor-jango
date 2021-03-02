@@ -55,5 +55,6 @@ module.exports = class extends Generator {
 
     install() {
         this.spawnCommandSync('poetry', ['install']);
+        this.config.set('dependencyManager', 'poetry');
     }
 };
