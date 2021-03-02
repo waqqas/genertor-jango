@@ -8,8 +8,6 @@ module.exports = class extends Generator {
         this.poetryOptions = [];
     }
     prompting() {
-        //poetry init [--name <...>] [--description <...>] [--author <...>] [--python <...>] [--dependency <...>] [--dev-dependency <...>] [-l <...>]
-
         const prompts = [
             {
                 type: 'input',
@@ -53,5 +51,9 @@ module.exports = class extends Generator {
 
     writing() {
         this.spawnCommandSync('poetry', ['init', ...this.poetryOptions]);
+    }
+
+    install() {
+        this.spawnCommandSync('poetry', ['install']);
     }
 };
