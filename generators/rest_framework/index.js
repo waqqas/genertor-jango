@@ -35,12 +35,11 @@ module.exports = class extends Generator {
     writing() {
         this._add_in_installed_apps('rest_framework');
         this._add_in_url_patterns(`path('${this.currentConfig.apiUrlPath}/', include('rest_framework.urls', namespace='rest_framework'))`);
-        this._add_variable_in_settings(`
-        REST_FRAMEWORK = {
-            'DEFAULT_PERMISSION_CLASSES': [
-                'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-            ]
-        }`);
+        this._append_in_settings(`REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}`);
     }
 
     _add_in_installed_apps(appName) {
@@ -55,7 +54,7 @@ module.exports = class extends Generator {
         this.fs.write(settingsFilePath, updated);
     }
 
-    _add_variable_in_settings(data) {
+    _append_in_settings(data) {
         const settingsFilePath = this.destinationPath(path.join(this.currentConfig.projectName, 'settings.py'));
         if (!this.fs.exists(settingsFilePath)) {
             this.log('Cannot file settings.py');
