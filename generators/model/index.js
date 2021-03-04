@@ -14,47 +14,53 @@ module.exports = class extends Generator {
       default: this.config.get("defaultApp"),
       required: false
     });
+
+    this.argument("modelName", {
+      desc: "Name of the model",
+      required: false,
+      type: String
+    });
+
     this.props = _.merge(
       {},
       this.config.getAll(),
-      _.pick(this.options, "defaultApp")
+      _.pick(this.options, "defaultApp", "modelName")
     );
+
+    this.log(this.props);
   }
 
   prompting() {
     const prompts = [];
-    if (_.isEmpty(this.props.app)) {
+    if (_.isEmpty(this.props.defaultApp)) {
       prompts.push({
         type: "input",
-        name: "config.defaultApp",
+        name: "defaultApp",
         message: "Enter app name to add models in?"
       });
     }
 
-    _.merge(prompts, [
-      {
+    if (_.isEmpty(this.props.modelName)) {
+      prompts.push({
         type: "input",
-        name: "model.name",
+        name: "modelName",
         message: "Enter name of the model?"
-      }
-    ]);
+      });
+    }
 
     if (!_.isEmpty(prompts)) {
       return this.prompt(prompts).then(props => {
-        _.merge(this.props, props.config);
-        this.model = props.model;
-        // This.log(this.props);
+        _.merge(this.props, props);
       });
     }
   }
 
-  writing() {
-    // This.log(this.model);
-    this.log(this.templatePath("model.py.ejs"));
-    const modelCode = ejs.render(
-      this.fs.read(this.templatePath("model.py.ejs")),
-      this.model
+  async writing() {
+    const modelCode = await ejs.renderFile(
+      this.templatePath("model.py.ejs"),
+      this.props
     );
+
     this.fs.append(
       this.destinationPath(`${this.props.defaultApp}/models.py`),
       modelCode
