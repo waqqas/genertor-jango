@@ -10,10 +10,18 @@ npm install -g yo
 npm install -g generator-jango
 ```
 
+```bash
+virtualenv local
+source local/bin/activate
+pip install django
+```
+
 Then generate your new project:
 
 ```bash
-yo jango
+yo jango <project-name>
+cd <project-name>
+yo jango:manage startapp api
 ```
 
 ## Getting To Know Yeoman
