@@ -2,7 +2,7 @@
 const _ = require("lodash");
 const ejs = require("ejs");
 
-const Generator = require("yeoman-generator");
+const Generator = require("../generator-base.js");
 
 module.exports = class extends Generator {
   constructor(args, opts) {
@@ -21,13 +21,7 @@ module.exports = class extends Generator {
       type: String
     });
 
-    this.props = _.merge(
-      {},
-      this.config.getAll(),
-      _.pick(this.options, "defaultApp", "modelName")
-    );
-
-    this.log(this.props);
+    this.props = _.merge({}, _.pick(this.options, "defaultApp", "modelName"));
   }
 
   prompting() {

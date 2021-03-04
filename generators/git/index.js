@@ -1,15 +1,10 @@
-'use strict';
-const Generator = require('yeoman-generator');
+"use strict";
+const Generator = require("../generator-base.js");
 
 module.exports = class extends Generator {
-    writing() {
-        this.fs.copy(
-            this.templatePath('**'),
-            this.destinationPath(''),
-            {
-                globOptions:
-                    { dot: true }
-            }
-        );
-    }
+  writing() {
+    this.fs.copy(this.templatePath("**"), this.destinationPath(""), {
+      globOptions: { dot: true }
+    });
+  }
 };

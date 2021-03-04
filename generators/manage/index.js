@@ -1,5 +1,6 @@
 "use strict";
-const Generator = require("yeoman-generator");
+const _ = require("lodash");
+const Generator = require("../generator-base.js");
 
 module.exports = class extends Generator {
   constructor(args, opts) {
@@ -27,8 +28,13 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    this.spawnCommand("python", ["manage.py", ...this.options.manage], {
+    this.spawnCommandSync("python", ["manage.py", ...this.options.manage], {
       cwd: this.destinationPath("")
     });
+
+    if (this.options.manage[0] === "startapp") {
+      const app = this.options.manage[1];
+      this._addInInstalledApps(`${app}.apps.${_.capitalize(app)}Config`);
+    }
   }
 };
