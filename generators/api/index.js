@@ -70,10 +70,15 @@ module.exports = class extends Generator {
   async writing() {
     this.props.modelName = _.capitalize(this.props.modelName);
 
-    const serializersFilePath = `${path.join(
-      this.props.appName,
-      "serializers.py"
-    )}`;
+    // Serializers.py
+    this._updateSerializers();
+
+    // Views.py
+    this._updateViews();
+  }
+
+  async _updateSerializers() {
+    const serializersFilePath = path.join(this.props.appName, "serializers.py");
 
     if (!this.fs.exists(this.destinationPath(serializersFilePath))) {
       this._addImportStatement(
@@ -93,6 +98,37 @@ module.exports = class extends Generator {
     );
 
     this.fs.append(this.destinationPath(serializersFilePath), code);
+  }
+
+  async _updateViews() {
+    const viewsFilePath = path.join(this.props.appName, "views.py");
+
+    this._addImportStatement(
+      viewsFilePath,
+      "from rest_framework import viewsets"
+    );
+
+    this._addImportStatement(
+      viewsFilePath,
+      "from rest_framework import permissions"
+    );
+
+    this._addImportStatement(
+      viewsFilePath,
+      `from ${this.props.modelsPath} import ${this.props.modelName}`
+    );
+
+    this._addImportStatement(
+      viewsFilePath,
+      `from ${this.props.appName}.serializers import ${this.props.modelName}Serializer`
+    );
+
+    const code = await ejs.renderFile(
+      this.templatePath("model_viewset.py.ejs"),
+      this.props
+    );
+
+    this.fs.append(this.destinationPath(viewsFilePath), code);
   }
 
   end() {
