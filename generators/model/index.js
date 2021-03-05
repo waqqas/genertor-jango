@@ -50,6 +50,8 @@ module.exports = class extends Generator {
   }
 
   async writing() {
+    this.props.modelName = _.capitalize(this.props.modelName);
+
     const modelCode = await ejs.renderFile(
       this.templatePath("model.py.ejs"),
       this.props
