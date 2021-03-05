@@ -22,7 +22,7 @@ module.exports = class extends Generator {
   configuring() {
     if (this.options.manage[0] === "startapp") {
       if (this.options.default) {
-        this.config.set("defaultApp", this.options.manage[1]);
+        this.config.set("appName", this.options.manage[1]);
       }
     }
   }
