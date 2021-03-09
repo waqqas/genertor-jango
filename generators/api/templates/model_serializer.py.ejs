@@ -1,6 +1,4 @@
-
-
-class <%= modelName %>Serializer(serializers.HyperlinkedModelSerializer):
+class <%= mode.capital %>Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = <%= modelName %>
+    model = <%= model.capital %>
         fields = []

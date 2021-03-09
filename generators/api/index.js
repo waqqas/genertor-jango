@@ -3,6 +3,7 @@ const _ = require("lodash");
 const path = require("path");
 const ejs = require("ejs");
 const chalk = require("chalk");
+const pluralize = require("pluralize");
 const Generator = require("../generator-base.js");
 
 module.exports = class extends Generator {
@@ -68,13 +69,23 @@ module.exports = class extends Generator {
   }
 
   async writing() {
-    this.props.modelName = _.capitalize(this.props.modelName);
+    this.props.model = {
+      lower: _.lowerCase(this.props.modelName),
+      upper: _.upperCase(this.props.modelName),
+      capital: _.capitalize(this.props.modelName),
+      camel: _.camelCase(this.props.modelName),
+      plural: pluralize.plural(this.props.modelName),
+      singlular: pluralize.singular(this.props.modelName)
+    };
 
     // Serializers.py
     this._updateSerializers();
 
     // Views.py
     this._updateViews();
+
+    // Urls.py
+    this._updateUrls();
   }
 
   async _updateSerializers() {
@@ -129,6 +140,30 @@ module.exports = class extends Generator {
     );
 
     this.fs.append(this.destinationPath(viewsFilePath), code);
+  }
+
+  async _updateUrls() {
+    const urlsFilePath = path.join(this.props.projectName, "urls.py");
+
+    this._addImportStatement(
+      urlsFilePath,
+      "from rest_framework import routers"
+    );
+
+    this._addImportStatement(urlsFilePath, "from django.urls import include");
+
+    this._addImportStatement(
+      urlsFilePath,
+      `from ${this.props.projectName},${this.props.appName} import views`
+    );
+
+    this._addInUrlPatterns("path('', include(router.urls))");
+
+    this._addBefore(
+      urlsFilePath,
+      "urlpatterns",
+      await ejs.renderFile(this.templatePath("urls_router.py.ejs"), this.props)
+    );
   }
 
   end() {
