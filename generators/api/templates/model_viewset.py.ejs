@@ -1,0 +1,9 @@
+
+class <%= model.capital %>ViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows <%= model.lower %> to be viewed or edited.
+    """
+    queryset = <%= model.capital %>.objects.all()
+    serializer_class = <%= model.capital %>Serializer
+    permission_classes = [permissions.IsAuthenticated]
+

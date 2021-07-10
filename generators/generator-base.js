@@ -54,4 +54,24 @@ module.exports = class extends Generator {
     );
     this.fs.write(urlsFilePath, updated);
   }
+
+  _addImportStatement(filePath, statement) {
+    const path = this.destinationPath(filePath);
+    let content = "";
+    if (this.fs.exists(path)) {
+      content = this.fs.read(path);
+    }
+
+    this.fs.write(path, `${statement}\n` + content);
+  }
+
+  _addBefore(filePath, pattern, statement) {
+    const content = this.fs.read(filePath);
+    const index = content.indexOf(pattern);
+    if (index !== -1) {
+      this.fs.write(filePath, content.substr(0, index));
+      this.fs.write(filePath, statement);
+      this.fs.write(filePath, content.substr(index));
+    }
+  }
 };

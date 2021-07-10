@@ -8,10 +8,10 @@ module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
 
-    this.option("defaultApp", {
+    this.option("appName", {
       desc: "Name of app to add models in",
       type: String,
-      default: this.config.get("defaultApp"),
+      default: this.config.get("appName"),
       required: false
     });
 
@@ -21,15 +21,15 @@ module.exports = class extends Generator {
       type: String
     });
 
-    this.props = _.merge({}, _.pick(this.options, "defaultApp", "modelName"));
+    _.merge(this.props, _.pick(this.options, "appName", "modelName"));
   }
 
   prompting() {
     const prompts = [];
-    if (_.isEmpty(this.props.defaultApp)) {
+    if (_.isEmpty(this.props.appName)) {
       prompts.push({
         type: "input",
-        name: "defaultApp",
+        name: "appName",
         message: "Enter app name to add models in?"
       });
     }
@@ -58,7 +58,7 @@ module.exports = class extends Generator {
     );
 
     this.fs.append(
-      this.destinationPath(`${this.props.defaultApp}/models.py`),
+      this.destinationPath(`${this.props.appName}/models.py`),
       modelCode
     );
   }
